@@ -1,0 +1,35 @@
+var batch = require('users/fitoprincipe/geetools:batch')
+var L8coll = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')
+.filter(ee.Filter.lt('CLOUD_COVER',5))
+.filterBounds(geometry)
+//.filter(ee.Filter.calendarRange(5,8,'month'))
+.filter(ee.Filter.date('2019-10-01','2019-10-05'))
+.filter(ee.Filter.or(
+    ee.Filter.and(ee.Filter.eq('WRS_PATH', 43),
+                  ee.Filter.eq('WRS_ROW', 19)),
+    ee.Filter.and(ee.Filter.eq('WRS_PATH', 42),
+                  ee.Filter.eq('WRS_ROW', 19))))
+print(L8coll)
+var visParams = {
+  bands: ['B7', 'B5', 'B4'],
+  min: 0,
+  max: 3000,
+  gamma: 1.4,
+};
+Map.setCenter(-111.4974, 58.4589, 12);
+Map.addLayer(L8coll.median(), visParams);
+// // Export a cloud-optimized GeoTIFF.
+// Export.image.toDrive({
+//   image: L8coll,
+//   description: 'imageToCOGeoTiffExample',
+//   scale: 30,
+//   //region: geometry,
+//   fileFormat: 'GeoTIFF',
+//   formatOptions: {
+//     cloudOptimized: true
+//   }
+// });
+batch.Download.ImageCollection.toDrive(L8coll, 'Folder',
+                {scale: 30,
+                 //region: geometry,
+                 type: 'float'})
