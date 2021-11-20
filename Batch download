@@ -3,7 +3,7 @@ var L8coll = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')
 .filter(ee.Filter.lt('CLOUD_COVER',5))
 .filterBounds(geometry)
 //.filter(ee.Filter.calendarRange(5,8,'month'))
-.filter(ee.Filter.date('2019-10-01','2019-10-05'))
+.filter(ee.Filter.date('2019-10-01','2019-12-05'))
 .filter(ee.Filter.or(
     ee.Filter.and(ee.Filter.eq('WRS_PATH', 43),
                   ee.Filter.eq('WRS_ROW', 19)),
